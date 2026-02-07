@@ -1,0 +1,3 @@
+This app is helpful for a service seekar to have desired service from a pre identified preson of the knowledge and experiance of the service in need.This will help lonely persons of all age to get their work done in a proffessional manner as well as in a secured way.
+The Service provider will also be benefited to procure more jobs to improve his/her earnings without any commission which they usually pay to middle men who reffers them.
+This app will also incorporate a referal system for both Seekers and providers to introduce this to another person in need and will also get some % for refferals.
