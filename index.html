@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sudarshan Chakra</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        #map { height: 400px; width: 100%; border-radius: 12px; }
+        #registrationMap { height: 300px; width: 100%; border-radius: 8px; margin-top: 10px; }
+        #customerRegistrationMap { height: 300px; width: 100%; border-radius: 8px; margin-top: 10px; }
+        #editProviderMap { height: 300px; width: 100%; border-radius: 8px; margin-top: 10px; }
+        #editCustomerMap { height: 300px; width: 100%; border-radius: 8px; margin-top: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <script>
+        // Initialize Google Maps API
+        window.initMap = function() {
+            console.log('Google Maps loaded successfully');
+        };
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&libraries=places&callback=initMap"></script>
+    
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showHome()">
+                <svg width="40" height="40" viewBox="0 0 100 100" class="text-orange-600">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="5" fill="currentColor"/>
+                    <line x1="50" y1="5" x2="50" y2="95" stroke="currentColor" stroke-width="2"/>
+                    <line x1="5" y1="50" x2="95" y2="50" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span class="text-2xl font-bold text-orange-600">Sudarshan Chakra</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="showHome()" class="text-gray-700 hover:text-orange-600 font-medium">Home</button>
+                <button onclick="showBrowse()" class="text-gray-700 hover:text-orange-600 font-medium">Browse Services</button>
+                <button onclick="showMap()" class="text-gray-700 hover:text-orange-600 font-medium">View Map</button>
+                <button onclick="toggleProfileMenu()" class="text-gray-700 hover:text-orange-600 font-medium">My Profile ▾</button>
+                <div id="profileMenu" class="hidden absolute top-16 right-32 bg-white shadow-lg rounded-lg p-4 z-50">
+                    <button onclick="showEditProviderProfile()" class="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded">Edit Provider Profile</button>
+                    <button onclick="showEditCustomerProfile()" class="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded">Edit Customer Profile</button>
+                </div>
+                <button onclick="showRegister()" class="text-orange-600 hover:text-orange-700 font-medium border-2 border-orange-600 px-4 py-2 rounded-lg">Register as Provider</button>
+                <button onclick="showCustomerRegister()" class="text-blue-600 hover:text-blue-700 font-medium border-2 border-blue-600 px-4 py-2 rounded-lg">Register as Customer</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="home" class="min-h-screen">
+        <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white py-20 px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <h1 class="text-5xl font-bold mb-6">Find the Perfect Service Provider</h1>
+                <p class="text-xl mb-8 text-orange-100">Connect with verified professionals across all categories</p>
+                <button onclick="showBrowse()" class="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50">
+                    Browse Services
+                </button>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Popular Categories</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div onclick="showHomeServices()" class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🏠</div>
+                    <div class="font-semibold">Home Services</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">💼</div>
+                    <div class="font-semibold">Professional</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🎨</div>
+                    <div class="font-semibold">Creative</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">💻</div>
+                    <div class="font-semibold">Tech & IT</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">💪</div>
+                    <div class="font-semibold">Health</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">📚</div>
+                    <div class="font-semibold">Education</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🚗</div>
+                    <div class="font-semibold">Automotive</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🐾</div>
+                    <div class="font-semibold">Pet Services</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="homeServices" class="min-h-screen py-8 px-4 hidden">
+        <div class="max-w-6xl mx-auto">
+            <button onclick="showHome()" class="mb-6 text-orange-600 hover:text-orange-700 font-medium flex items-center gap-2">
+                <span>←</span> Back to Home
+            </button>
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">Home Services</h1>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🔧</div>
+                    <div class="font-semibold">Plumber</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">⚡</div>
+                    <div class="font-semibold">Electrician</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">❄️</div>
+                    <div class="font-semibold">AC Repair</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🔌</div>
+                    <div class="font-semibold">Appliance Repair</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🪚</div>
+                    <div class="font-semibold">Carpenter</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">🧹</div>
+                    <div class="font-semibold">Cleaning Services</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">👩‍🍳</div>
+                    <div class="font-semibold">Maids</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer text-center transition-all hover:scale-105">
+                    <div class="text-4xl mb-3">💅</div>
+                    <div class="font-semibold">Beauticians</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapView" class="min-h-screen py-8 px-4 hidden">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Service Providers Near You</h1>
+            <p class="text-gray-600 mb-6">Click on markers to view provider details and get directions</p>
+            
+            <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
+                <div class="flex gap-4 items-center mb-4">
+                    <input type="text" id="searchLocation" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg" placeholder="Search location...">
+                    <button onclick="searchMapLocation()" class="bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700">Search</button>
+                    <button onclick="centerOnMyLocation()" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200">My Location</button>
+                </div>
+                <div id="map"></div>
+            </div>
+
+            <div id="selectedProvider" class="hidden bg-white rounded-xl shadow-lg p-6">
+                <!-- Selected provider details will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="register" class="min-h-screen py-8 px-4 hidden">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Register as Service Provider</h1>
+            <p class="text-gray-600 mb-8">Join our platform and connect with customers</p>
+            
+            <form id="registrationForm" class="bg-white rounded-xl shadow-lg p-8">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                    <input type="text" id="providerName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="Enter your full name">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Aadhaar Number *</label>
+                    <input type="text" id="providerAadhaar" required pattern="[0-9]{12}" maxlength="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="12-digit Aadhaar number">
+                    <p class="text-xs text-gray-500 mt-1">For security and verification purposes only</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Religion *</label>
+                    <select id="providerReligion" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                        <option value="">Select your religion</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Muslim">Muslim</option>
+                        <option value="Christian">Christian</option>
+                        <option value="Sikh">Sikh</option>
+                        <option value="Buddhist">Buddhist</option>
+                        <option value="Jain">Jain</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Mobile Number *</label>
+                    <input type="tel" id="providerMobile" required pattern="[0-9]{10}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="10-digit mobile number">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Location *</label>
+                    <input type="text" id="providerLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="Search your location or click on map">
+                    <div class="mt-2 flex gap-2">
+                        <button type="button" onclick="getCurrentLocation()" class="text-orange-600 hover:text-orange-700 text-sm font-medium">
+                            📍 Use My Current Location
+                        </button>
+                        <button type="button" onclick="toggleManualCoords('provider')" class="text-orange-600 hover:text-orange-700 text-sm font-medium">
+                            ⚙️ Enter Coordinates Manually
+                        </button>
+                    </div>
+                    <div id="providerManualCoords" class="hidden mt-2 grid grid-cols-2 gap-2">
+                        <input type="number" step="any" id="providerLatManual" class="px-3 py-2 border rounded" placeholder="Latitude (e.g., 26.9124)">
+                        <input type="number" step="any" id="providerLngManual" class="px-3 py-2 border rounded" placeholder="Longitude (e.g., 75.7873)">
+                        <button type="button" onclick="setManualCoords('provider')" class="col-span-2 bg-orange-500 text-white px-4 py-2 rounded text-sm">Set Coordinates</button>
+                    </div>
+                    <div id="registrationMap" class="mt-3"></div>
+                    <input type="hidden" id="providerLat">
+                    <input type="hidden" id="providerLng">
+                    <p class="text-xs text-gray-500 mt-1">If map doesn't load, use manual coordinate entry or just enter your city/area name</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Service Category *</label>
+                    <select id="providerCategory" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                        <option value="">Select a category</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="AC Repair">AC Repair</option>
+                        <option value="Appliance Repair">Appliance Repair</option>
+                        <option value="Carpenter">Carpenter</option>
+                        <option value="Cleaning Services">Cleaning Services</option>
+                        <option value="Maids">Maids</option>
+                        <option value="Beauticians">Beauticians</option>
+                        <option value="Business Consulting">Business Consulting</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Auto Repair">Auto Repair</option>
+                        <option value="Pet Services">Pet Services</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Years of Experience *</label>
+                    <input type="number" id="providerExperience" required min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="Years">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Hourly Rate (₹) *</label>
+                    <input type="number" id="providerRate" required min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="Rate per hour in rupees">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Skills/Specialization</label>
+                    <input type="text" id="providerSkills" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="e.g., Emergency services, Licensed, Certified">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">About You</label>
+                    <textarea id="providerBio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500" placeholder="Brief description about your services"></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700">
+                        Register Now
+                    </button>
+                    <button type="button" onclick="showHome()" class="px-6 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <div id="successMessage" class="hidden mt-6 bg-green-50 border-2 border-green-500 text-green-800 p-6 rounded-lg">
+                <p class="font-semibold text-lg">✓ Registration Successful!</p>
+                <p class="text-sm mt-2">Your profile has been created and is now visible to customers.</p>
+                <div class="mt-4 flex gap-3">
+                    <button onclick="showBrowse()" class="bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View All Providers
+                    </button>
+                    <button onclick="showMap()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                        View on Map
+                    </button>
+                    <button onclick="showEditProviderProfile()" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700">
+                        Edit My Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customerRegister" class="min-h-screen py-8 px-4 hidden">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Register as Customer</h1>
+            <p class="text-gray-600 mb-8">Create your account to book services and connect with providers</p>
+            
+            <form id="customerRegistrationForm" class="bg-white rounded-xl shadow-lg p-8">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                    <input type="text" id="customerName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter your full name">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Aadhaar Number *</label>
+                    <input type="text" id="customerAadhaar" required pattern="[0-9]{12}" maxlength="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="12-digit Aadhaar number">
+                    <p class="text-xs text-gray-500 mt-1">For security and verification purposes only</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Religion *</label>
+                    <select id="customerReligion" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="">Select your religion</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Muslim">Muslim</option>
+                        <option value="Christian">Christian</option>
+                        <option value="Sikh">Sikh</option>
+                        <option value="Buddhist">Buddhist</option>
+                        <option value="Jain">Jain</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Mobile Number *</label>
+                    <input type="tel" id="customerMobile" required pattern="[0-9]{10}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="10-digit mobile number">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                    <input type="email" id="customerEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="your.email@example.com">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Location *</label>
+                    <input type="text" id="customerLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Search your location or click on map">
+                    <div class="mt-2 flex gap-2">
+                        <button type="button" onclick="getCustomerCurrentLocation()" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            📍 Use My Current Location
+                        </button>
+                        <button type="button" onclick="toggleManualCoords('customer')" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            ⚙️ Enter Coordinates Manually
+                        </button>
+                    </div>
+                    <div id="customerManualCoords" class="hidden mt-2 grid grid-cols-2 gap-2">
+                        <input type="number" step="any" id="customerLatManual" class="px-3 py-2 border rounded" placeholder="Latitude (e.g., 26.9124)">
+                        <input type="number" step="any" id="customerLngManual" class="px-3 py-2 border rounded" placeholder="Longitude (e.g., 75.7873)">
+                        <button type="button" onclick="setManualCoords('customer')" class="col-span-2 bg-blue-500 text-white px-4 py-2 rounded text-sm">Set Coordinates</button>
+                    </div>
+                    <div id="customerRegistrationMap" class="mt-3"></div>
+                    <input type="hidden" id="customerLat">
+                    <input type="hidden" id="customerLng">
+                    <p class="text-xs text-gray-500 mt-1">If map doesn't load, use manual coordinate entry or just enter your city/area name</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Complete Address *</label>
+                    <textarea id="customerAddress" required rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="House/Flat No, Street, Landmark"></textarea>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Preferred Services</label>
+                    <select id="customerPreference" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="">Select services you're interested in</option>
+                        <option value="Home Services">Home Services</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="AC Repair">AC Repair</option>
+                        <option value="Appliance Repair">Appliance Repair</option>
+                        <option value="Carpenter">Carpenter</option>
+                        <option value="Cleaning Services">Cleaning Services</option>
+                        <option value="Maids">Maids</option>
+                        <option value="Beauticians">Beauticians</option>
+                        <option value="Business Consulting">Business Consulting</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Auto Repair">Auto Repair</option>
+                        <option value="Pet Services">Pet Services</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                        Register Now
+                    </button>
+                    <button type="button" onclick="showHome()" class="px-6 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <div id="customerSuccessMessage" class="hidden mt-6 bg-green-50 border-2 border-green-500 text-green-800 p-6 rounded-lg">
+                <p class="font-semibold text-lg">✓ Registration Successful!</p>
+                <p class="text-sm mt-2">Welcome! You can now browse and book service providers.</p>
+                <div class="mt-4 flex gap-3">
+                    <button onclick="showBrowse()" class="bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        Browse Providers
+                    </button>
+                    <button onclick="showMap()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                        Find Nearby Providers
+                    </button>
+                    <button onclick="showEditCustomerProfile()" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700">
+                        Edit My Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="browse" class="min-h-screen py-8 px-4 hidden">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">Browse Service Providers</h1>
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">👩‍💼</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Sarah Johnson</h3>
+                            <p class="text-gray-600 text-sm">Business Consulting</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">4.9</span>
+                        <span class="text-gray-500 text-sm">(127 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 New York, NY</div>
+                    <div class="font-semibold text-gray-800 mb-4">$150/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Strategy</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Marketing</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">👨‍🔧</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Mike Chen</h3>
+                            <p class="text-gray-600 text-sm">Plumbing Services</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">4.8</span>
+                        <span class="text-gray-500 text-sm">(203 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 Los Angeles, CA</div>
+                    <div class="font-semibold text-gray-800 mb-4">$85/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Repairs</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Emergency</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">👩‍🎨</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Emma Rodriguez</h3>
+                            <p class="text-gray-600 text-sm">Graphic Design</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">5.0</span>
+                        <span class="text-gray-500 text-sm">(89 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 Austin, TX</div>
+                    <div class="font-semibold text-gray-800 mb-4">$95/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Branding</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Logo Design</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">👨‍💻</div>
+                        <div>
+                            <h3 class="font-bold text-lg">David Kumar</h3>
+                            <p class="text-gray-600 text-sm">Web Development</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">4.9</span>
+                        <span class="text-gray-500 text-sm">(156 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 San Francisco, CA</div>
+                    <div class="font-semibold text-gray-800 mb-4">$120/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">React</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Node.js</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">🚗</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Alex Martinez</h3>
+                            <p class="text-gray-600 text-sm">Auto Repair</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">4.8</span>
+                        <span class="text-gray-500 text-sm">(145 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 Detroit, MI</div>
+                    <div class="font-semibold text-gray-800 mb-4">$90/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Engine Repair</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Diagnostics</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">🐕</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Maria Gonzalez</h3>
+                            <p class="text-gray-600 text-sm">Dog Training</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">4.7</span>
+                        <span class="text-gray-500 text-sm">(167 reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 Portland, OR</div>
+                    <div class="font-semibold text-gray-800 mb-4">$65/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Obedience</span>
+                        <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">Behavior</span>
+                    </div>
+                    <button class="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                        View Profile
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize providers array from localStorage or use default providers
+        let providers = JSON.parse(localStorage.getItem('providers')) || [
+            {
+                name: "Sarah Johnson",
+                category: "Business Consulting",
+                location: "New York, NY",
+                rate: 150,
+                rating: 4.9,
+                reviews: 127,
+                skills: ["Strategy", "Marketing"],
+                emoji: "👩‍💼",
+                lat: 40.7128,
+                lng: -74.0060
+            },
+            {
+                name: "Mike Chen",
+                category: "Plumber",
+                location: "Los Angeles, CA",
+                rate: 85,
+                rating: 4.8,
+                reviews: 203,
+                skills: ["Repairs", "Emergency"],
+                emoji: "👨‍🔧",
+                lat: 34.0522,
+                lng: -118.2437
+            },
+            {
+                name: "Emma Rodriguez",
+                category: "Graphic Design",
+                location: "Austin, TX",
+                rate: 95,
+                rating: 5.0,
+                reviews: 89,
+                skills: ["Branding", "Logo Design"],
+                emoji: "👩‍🎨",
+                lat: 30.2672,
+                lng: -97.7431
+            },
+            {
+                name: "David Kumar",
+                category: "Web Development",
+                location: "San Francisco, CA",
+                rate: 120,
+                rating: 4.9,
+                reviews: 156,
+                skills: ["React", "Node.js"],
+                emoji: "👨‍💻",
+                lat: 37.7749,
+                lng: -122.4194
+            },
+            {
+                name: "Alex Martinez",
+                category: "Auto Repair",
+                location: "Detroit, MI",
+                rate: 90,
+                rating: 4.8,
+                reviews: 145,
+                skills: ["Engine Repair", "Diagnostics"],
+                emoji: "🚗",
+                lat: 42.3314,
+                lng: -83.0458
+            },
+            {
+                name: "Maria Gonzalez",
+                category: "Pet Services",
+                location: "Portland, OR",
+                rate: 65,
+                rating: 4.7,
+                reviews: 167,
+                skills: ["Obedience", "Behavior"],
+                emoji: "🐕",
+                lat: 45.5152,
+                lng: -122.6784
+            }
+        ];
+
+        let map, registrationMap, registrationMarker;
+        let customerRegistrationMap, customerRegistrationMarker;
+        let userLocation = { lat: 26.9124, lng: 75.7873 }; // Default: Jaipur
+
+        // Initialize customers array from localStorage
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+
+        // Helper functions
+        function toggleManualCoords(type) {
+            const el = document.getElementById(type + 'ManualCoords');
+            el.classList.toggle('hidden');
+        }
+
+        function setManualCoords(type) {
+            const lat = parseFloat(document.getElementById(type + 'LatManual').value);
+            const lng = parseFloat(document.getElementById(type + 'LngManual').value);
+            
+            if (isNaN(lat) || isNaN(lng)) {
+                alert('Please enter valid latitude and longitude');
+                return;
+            }
+            
+            document.getElementById(type + 'Lat').value = lat;
+            document.getElementById(type + 'Lng').value = lng;
+            alert('Coordinates set successfully! Lat: ' + lat + ', Lng: ' + lng);
+        }
+
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close profile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const isClickInside = event.target.closest('button')?.textContent.includes('My Profile');
+            if (!isClickInside && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Category emoji mapping
+        const categoryEmojis = {
+            "Plumber": "🔧",
+            "Electrician": "⚡",
+            "AC Repair": "❄️",
+            "Appliance Repair": "🔌",
+            "Carpenter": "🪚",
+            "Cleaning Services": "🧹",
+            "Maids": "👩‍🍳",
+            "Beauticians": "💅",
+            "Business Consulting": "👩‍💼",
+            "Graphic Design": "👩‍🎨",
+            "Web Development": "👨‍💻",
+            "Auto Repair": "🚗",
+            "Pet Services": "🐕",
+            "Other": "⚙️"
+        };
+
+        function showHome() {
+            document.getElementById('home').classList.remove('hidden');
+            document.getElementById('browse').classList.add('hidden');
+            document.getElementById('homeServices').classList.add('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('mapView').classList.add('hidden');
+            document.getElementById('customerRegister').classList.add('hidden');
+        }
+        
+        function showBrowse() {
+            // Reload providers from localStorage to get latest data
+            providers = JSON.parse(localStorage.getItem('providers')) || providers;
+            
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('browse').classList.remove('hidden');
+            document.getElementById('homeServices').classList.add('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('mapView').classList.add('hidden');
+            document.getElementById('customerRegister').classList.add('hidden');
+            renderProviders();
+        }
+
+        function showHomeServices() {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('browse').classList.add('hidden');
+            document.getElementById('homeServices').classList.remove('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('mapView').classList.add('hidden');
+            document.getElementById('customerRegister').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('browse').classList.add('hidden');
+            document.getElementById('homeServices').classList.add('hidden');
+            document.getElementById('register').classList.remove('hidden');
+            document.getElementById('mapView').classList.add('hidden');
+            document.getElementById('customerRegister').classList.add('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+            setTimeout(initRegistrationMap, 100);
+        }
+
+        function showMap() {
+            // Reload providers from localStorage to get latest data
+            providers = JSON.parse(localStorage.getItem('providers')) || providers;
+            
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('browse').classList.add('hidden');
+            document.getElementById('homeServices').classList.add('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('mapView').classList.remove('hidden');
+            document.getElementById('customerRegister').classList.add('hidden');
+            setTimeout(initMap, 100);
+        }
+
+        function showCustomerRegister() {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('browse').classList.add('hidden');
+            document.getElementById('homeServices').classList.add('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('mapView').classList.add('hidden');
+            document.getElementById('customerRegister').classList.remove('hidden');
+            document.getElementById('customerSuccessMessage').classList.add('hidden');
+            document.getElementById('profileMenu').classList.add('hidden');
+            setTimeout(initCustomerRegistrationMap, 100);
+        }
+
+        function showEditProviderProfile() {
+            const currentProviderId = localStorage.getItem('currentProviderId');
+            if (!currentProviderId) {
+                alert('Please register as a provider first!');
+                showRegister();
+                return;
+            }
+            
+            const provider = providers.find(p => p.id === currentProviderId);
+            if (!provider) {
+                alert('Provider profile not found. Please register again.');
+                showRegister();
+                return;
+            }
+
+            document.getElementById('profileMenu').classList.add('hidden');
+            
+            // For now, show registration form with pre-filled data
+            showRegister();
+            setTimeout(() => {
+                // Pre-fill the form
+                document.getElementById('providerName').value = provider.name;
+                document.getElementById('providerAadhaar').value = provider.aadhaar;
+                document.getElementById('providerReligion').value = provider.religion;
+                document.getElementById('providerMobile').value = provider.mobile;
+                document.getElementById('providerLocation').value = provider.location;
+                document.getElementById('providerCategory').value = provider.category;
+                document.getElementById('providerExperience').value = provider.experience;
+                document.getElementById('providerRate').value = provider.rate;
+                document.getElementById('providerSkills').value = provider.skills.join(', ');
+                document.getElementById('providerBio').value = provider.bio || '';
+                document.getElementById('providerLat').value = provider.lat;
+                document.getElementById('providerLng').value = provider.lng;
+                
+                alert('Edit your details and submit to update your profile');
+            }, 500);
+        }
+
+        function showEditCustomerProfile() {
+            const currentCustomerId = localStorage.getItem('currentCustomerId');
+            if (!currentCustomerId) {
+                alert('Please register as a customer first!');
+                showCustomerRegister();
+                return;
+            }
+            
+            const customer = customers.find(c => c.id === currentCustomerId);
+            if (!customer) {
+                alert('Customer profile not found. Please register again.');
+                showCustomerRegister();
+                return;
+            }
+
+            document.getElementById('profileMenu').classList.add('hidden');
+            
+            // For now, show registration form with pre-filled data
+            showCustomerRegister();
+            setTimeout(() => {
+                // Pre-fill the form
+                document.getElementById('customerName').value = customer.name;
+                document.getElementById('customerAadhaar').value = customer.aadhaar;
+                document.getElementById('customerReligion').value = customer.religion;
+                document.getElementById('customerMobile').value = customer.mobile;
+                document.getElementById('customerEmail').value = customer.email || '';
+                document.getElementById('customerLocation').value = customer.location;
+                document.getElementById('customerAddress').value = customer.address;
+                document.getElementById('customerPreference').value = customer.preference || '';
+                document.getElementById('customerLat').value = customer.lat;
+                document.getElementById('customerLng').value = customer.lng;
+                
+                alert('Edit your details and submit to update your profile');
+            }, 500);
+        }
+
+        // Initialize main map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: userLocation,
+                zoom: 12
+            });
+
+            // Add markers for all providers with locations
+            providers.forEach((provider, index) => {
+                if (provider.lat && provider.lng) {
+                    const marker = new google.maps.Marker({
+                        position: { lat: provider.lat, lng: provider.lng },
+                        map: map,
+                        title: provider.name,
+                        label: provider.emoji
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; max-width: 250px;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">${provider.name}</h3>
+                                <p style="margin: 4px 0; color: #666; font-size: 14px;">${provider.category}</p>
+                                <p style="margin: 4px 0; color: #666; font-size: 13px;">⭐ ${provider.rating} (${provider.reviews} reviews)</p>
+                                <p style="margin: 4px 0; font-weight: bold; font-size: 14px;">₹${provider.rate}/hr</p>
+                                <button onclick="getDirections(${provider.lat}, ${provider.lng}, '${provider.name}')" 
+                                    style="margin-top: 8px; background: #ea580c; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                    Get Directions
+                                </button>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                }
+            });
+        }
+
+        // Initialize registration map
+        function initRegistrationMap() {
+            registrationMap = new google.maps.Map(document.getElementById('registrationMap'), {
+                center: userLocation,
+                zoom: 13
+            });
+
+            registrationMarker = new google.maps.Marker({
+                position: userLocation,
+                map: registrationMap,
+                draggable: true,
+                title: "Your Location"
+            });
+
+            // Update form when marker is dragged
+            registrationMarker.addListener('dragend', function() {
+                const position = registrationMarker.getPosition();
+                document.getElementById('providerLat').value = position.lat();
+                document.getElementById('providerLng').value = position.lng();
+                geocodeLocation(position.lat(), position.lng());
+            });
+
+            // Allow clicking on map to place marker
+            registrationMap.addListener('click', function(event) {
+                registrationMarker.setPosition(event.latLng);
+                document.getElementById('providerLat').value = event.latLng.lat();
+                document.getElementById('providerLng').value = event.latLng.lng();
+                geocodeLocation(event.latLng.lat(), event.latLng.lng());
+            });
+
+            // Initialize autocomplete on location input
+            const input = document.getElementById('providerLocation');
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', registrationMap);
+
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    const location = place.geometry.location;
+                    registrationMap.setCenter(location);
+                    registrationMarker.setPosition(location);
+                    document.getElementById('providerLat').value = location.lat();
+                    document.getElementById('providerLng').value = location.lng();
+                }
+            });
+        }
+
+        // Get current location
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    registrationMarker.setPosition(pos);
+                    registrationMap.setCenter(pos);
+                    document.getElementById('providerLat').value = pos.lat;
+                    document.getElementById('providerLng').value = pos.lng;
+                    geocodeLocation(pos.lat, pos.lng);
+                }, function() {
+                    alert('Unable to get your location. Please search or click on the map.');
+                });
+            }
+        }
+
+        // Geocode location to get address
+        function geocodeLocation(lat, lng) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: { lat, lng } }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    document.getElementById('providerLocation').value = results[0].formatted_address;
+                }
+            });
+        }
+
+        // Get directions to provider
+        function getDirections(lat, lng, name) {
+            const destination = `${lat},${lng}`;
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&destination_place_id=${name}`;
+            window.open(url, '_blank');
+        }
+
+        // Search location on map
+        function searchMapLocation() {
+            const searchBox = document.getElementById('searchLocation').value;
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: searchBox }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(13);
+                }
+            });
+        }
+
+        // Center map on user's location
+        function centerOnMyLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(pos);
+                    map.setZoom(13);
+                    userLocation = pos;
+                });
+            }
+        }
+
+        function renderProviders() {
+            const browseGrid = document.querySelector('#browse .grid');
+            browseGrid.innerHTML = providers.map((provider, index) => `
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">${provider.emoji}</div>
+                        <div>
+                            <h3 class="font-bold text-lg">${provider.name}</h3>
+                            <p class="text-gray-600 text-sm">${provider.category}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-yellow-400">⭐</span>
+                        <span class="font-semibold">${provider.rating}</span>
+                        <span class="text-gray-500 text-sm">(${provider.reviews} reviews)</span>
+                    </div>
+                    <div class="text-gray-600 text-sm mb-2">📍 ${provider.location}</div>
+                    <div class="font-semibold text-gray-800 mb-4">₹${provider.rate}/hr</div>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        ${provider.skills.map(skill => 
+                            `<span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs">${skill}</span>`
+                        ).join('')}
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="flex-1 bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700">
+                            View Profile
+                        </button>
+                        ${provider.lat && provider.lng ? `
+                            <button onclick="getDirections(${provider.lat}, ${provider.lng}, '${provider.name}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                                📍 Directions
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('providerName').value;
+            const aadhaar = document.getElementById('providerAadhaar').value;
+            const religion = document.getElementById('providerReligion').value;
+            const mobile = document.getElementById('providerMobile').value;
+            const location = document.getElementById('providerLocation').value;
+            const category = document.getElementById('providerCategory').value;
+            const experience = document.getElementById('providerExperience').value;
+            const rate = document.getElementById('providerRate').value;
+            const skills = document.getElementById('providerSkills').value;
+            const bio = document.getElementById('providerBio').value;
+            const lat = parseFloat(document.getElementById('providerLat').value);
+            const lng = parseFloat(document.getElementById('providerLng').value);
+
+            // Use default coordinates if not set (Jaipur, Rajasthan)
+            const finalLat = (lat && !isNaN(lat)) ? lat : 26.9124;
+            const finalLng = (lng && !isNaN(lng)) ? lng : 75.7873;
+
+            // Check for duplicate Aadhaar (skip if editing own profile)
+            const currentProviderId = localStorage.getItem('currentProviderId');
+            const existingProvider = providers.find(p => p.aadhaar === aadhaar && p.id !== currentProviderId);
+            if (existingProvider) {
+                alert('This Aadhaar number is already registered! Each person can register only once.');
+                return;
+            }
+
+            // Check if we're editing existing profile
+            const editingProvider = providers.find(p => p.id === currentProviderId);
+            
+            if (editingProvider) {
+                // Update existing provider
+                editingProvider.name = name;
+                editingProvider.aadhaar = aadhaar;
+                editingProvider.religion = religion;
+                editingProvider.mobile = mobile;
+                editingProvider.location = location;
+                editingProvider.category = category;
+                editingProvider.experience = experience;
+                editingProvider.rate = parseInt(rate);
+                editingProvider.skills = skills ? skills.split(',').map(s => s.trim()).slice(0, 2) : [experience + " yrs exp"];
+                editingProvider.bio = bio;
+                editingProvider.lat = finalLat;
+                editingProvider.lng = finalLng;
+                editingProvider.emoji = categoryEmojis[category] || "⚙️";
+                
+                // Save to localStorage
+                localStorage.setItem('providers', JSON.stringify(providers));
+                
+                alert('Profile updated successfully!');
+            } else {
+
+            // Create new provider object
+            const newProvider = {
+                id: 'provider_' + Date.now(),
+                name: name,
+                aadhaar: aadhaar,
+                religion: religion,
+                category: category,
+                location: location,
+                rate: parseInt(rate),
+                rating: 5.0,
+                reviews: 0,
+                skills: skills ? skills.split(',').map(s => s.trim()).slice(0, 2) : [experience + " yrs exp"],
+                emoji: categoryEmojis[category] || "⚙️",
+                mobile: mobile,
+                bio: bio,
+                experience: experience,
+                lat: finalLat,
+                lng: finalLng,
+                verified: false,
+                registeredDate: new Date().toISOString()
+            };
+
+            // Add to providers array
+            providers.push(newProvider);
+            
+            // Save to localStorage
+            localStorage.setItem('providers', JSON.stringify(providers));
+            localStorage.setItem('currentProviderId', newProvider.id);
+            }
+
+            // Show success message
+            document.getElementById('successMessage').classList.remove('hidden');
+            
+            // Reset form and hidden fields
+            this.reset();
+            document.getElementById('providerLat').value = '';
+            document.getElementById('providerLng').value = '';
+
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Initial render
+        renderProviders();
+
+        // Initialize customer registration map
+        function initCustomerRegistrationMap() {
+            customerRegistrationMap = new google.maps.Map(document.getElementById('customerRegistrationMap'), {
+                center: userLocation,
+                zoom: 13
+            });
+
+            customerRegistrationMarker = new google.maps.Marker({
+                position: userLocation,
+                map: customerRegistrationMap,
+                draggable: true,
+                title: "Your Location"
+            });
+
+            // Update form when marker is dragged
+            customerRegistrationMarker.addListener('dragend', function() {
+                const position = customerRegistrationMarker.getPosition();
+                document.getElementById('customerLat').value = position.lat();
+                document.getElementById('customerLng').value = position.lng();
+                geocodeCustomerLocation(position.lat(), position.lng());
+            });
+
+            // Allow clicking on map to place marker
+            customerRegistrationMap.addListener('click', function(event) {
+                customerRegistrationMarker.setPosition(event.latLng);
+                document.getElementById('customerLat').value = event.latLng.lat();
+                document.getElementById('customerLng').value = event.latLng.lng();
+                geocodeCustomerLocation(event.latLng.lat(), event.latLng.lng());
+            });
+
+            // Initialize autocomplete on location input
+            const input = document.getElementById('customerLocation');
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', customerRegistrationMap);
+
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    const location = place.geometry.location;
+                    customerRegistrationMap.setCenter(location);
+                    customerRegistrationMarker.setPosition(location);
+                    document.getElementById('customerLat').value = location.lat();
+                    document.getElementById('customerLng').value = location.lng();
+                }
+            });
+        }
+
+        // Get customer current location
+        function getCustomerCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    customerRegistrationMarker.setPosition(pos);
+                    customerRegistrationMap.setCenter(pos);
+                    document.getElementById('customerLat').value = pos.lat;
+                    document.getElementById('customerLng').value = pos.lng;
+                    geocodeCustomerLocation(pos.lat, pos.lng);
+                }, function() {
+                    alert('Unable to get your location. Please search or click on the map.');
+                });
+            }
+        }
+
+        // Geocode customer location to get address
+        function geocodeCustomerLocation(lat, lng) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: { lat, lng } }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    document.getElementById('customerLocation').value = results[0].formatted_address;
+                }
+            });
+        }
+
+        // Handle customer form submission
+        document.getElementById('customerRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('customerName').value;
+            const aadhaar = document.getElementById('customerAadhaar').value;
+            const religion = document.getElementById('customerReligion').value;
+            const mobile = document.getElementById('customerMobile').value;
+            const email = document.getElementById('customerEmail').value;
+            const location = document.getElementById('customerLocation').value;
+            const address = document.getElementById('customerAddress').value;
+            const preference = document.getElementById('customerPreference').value;
+            const lat = parseFloat(document.getElementById('customerLat').value);
+            const lng = parseFloat(document.getElementById('customerLng').value);
+
+            // Use default coordinates if not set (Jaipur, Rajasthan)
+            const finalLat = (lat && !isNaN(lat)) ? lat : 26.9124;
+            const finalLng = (lng && !isNaN(lng)) ? lng : 75.7873;
+
+            // Check for duplicate Aadhaar (skip if editing own profile)
+            const currentCustomerId = localStorage.getItem('currentCustomerId');
+            const existingCustomer = customers.find(c => c.aadhaar === aadhaar && c.id !== currentCustomerId);
+            if (existingCustomer) {
+                alert('This Aadhaar number is already registered! Each person can register only once.');
+                return;
+            }
+
+            // Check if we're editing existing profile
+            const editingCustomer = customers.find(c => c.id === currentCustomerId);
+            
+            if (editingCustomer) {
+                // Update existing customer
+                editingCustomer.name = name;
+                editingCustomer.aadhaar = aadhaar;
+                editingCustomer.religion = religion;
+                editingCustomer.mobile = mobile;
+                editingCustomer.email = email;
+                editingCustomer.location = location;
+                editingCustomer.address = address;
+                editingCustomer.preference = preference;
+                editingCustomer.lat = finalLat;
+                editingCustomer.lng = finalLng;
+                
+                // Save to localStorage
+                localStorage.setItem('customers', JSON.stringify(customers));
+                
+                alert('Profile updated successfully!');
+            } else {
+
+            // Create new customer object
+            const newCustomer = {
+                id: 'customer_' + Date.now(),
+                name: name,
+                aadhaar: aadhaar,
+                religion: religion,
+                mobile: mobile,
+                email: email,
+                location: location,
+                address: address,
+                preference: preference,
+                lat: finalLat,
+                lng: finalLng,
+                verified: false,
+                registeredDate: new Date().toISOString()
+            };
+
+            // Add to customers array
+            customers.push(newCustomer);
+            
+            // Save to localStorage
+            localStorage.setItem('customers', JSON.stringify(customers));
+            localStorage.setItem('currentCustomerId', newCustomer.id);
+            }
+
+            // Show success message
+            document.getElementById('customerSuccessMessage').classList.remove('hidden');
+            
+            // Reset form and hidden fields
+            this.reset();
+            document.getElementById('customerLat').value = '';
+            document.getElementById('customerLng').value = '';
+
+            // Scroll to success message
+            document.getElementById('customerSuccessMessage').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
